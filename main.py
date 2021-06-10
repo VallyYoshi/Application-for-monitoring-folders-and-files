@@ -1,9 +1,8 @@
 import logging
 import multiprocessing
 import time
+
 import keyboard
-
-
 from watchdog.events import LoggingEventHandler
 from watchdog.observers import Observer
 
@@ -12,18 +11,18 @@ observer = Observer()
 
 counter = 1
 answer = ''
-folder_path = ""
-folder_path_two = ""
+folder_path = ''
+folder_path_two = ''
 
 
-def ShowMenu():
+def show_menu():
     print('Команды во время работы программы: \n'
           '1. Горячая клавиша "P" - Поставить программу на паузу\n'
           '2. Горячая клавиша "R" - Продолжить работу прогруммы\n'
           '3. Горячая клавиша "Q" - Выход из программы\n')
 
 
-def StartWork():
+def start_work():
 
     global counter, folder_path, folder_path_two, answer
 
@@ -35,7 +34,7 @@ def StartWork():
             folder_path_two = input('Введите путь к папке в которой хотите отслеживать изменения: ')
             break
 
-        if answer != 'y' and answer != 'Y':
+        if answer.lower() != 'y':
             break
 
         counter += 1
@@ -45,9 +44,9 @@ def StartWork():
         m.start()
     else:
         m = multiprocessing.Process(target=monitor_folder, args=(folder_path, 1,))
-        mTwo = multiprocessing.Process(target=monitor_folder, args=(folder_path_two, 2,))
+        m_two = multiprocessing.Process(target=monitor_folder, args=(folder_path_two, 2,))
         m.start()
-        mTwo.start()
+        m_two.start()
 
 
 def monitor_folder(path, thread_number):
@@ -67,7 +66,7 @@ def monitor_folder(path, thread_number):
                 if works:
                     observer.on_thread_stop()
                     works = False
-                    print('Поток №{0} приостановлена!'.format(thread_number))
+                    print(f'Поток №{thread_number} приостановлен!')
 
             if keyboard.is_pressed('r') or keyboard.is_pressed('R'):
                 if not works:
@@ -80,10 +79,10 @@ def monitor_folder(path, thread_number):
 
                     works = True
 
-                    print('Поток №{0} начал работу!'.format(thread_number))
+                    print(f'Поток №{thread_number} начал работу!')
 
             if keyboard.is_pressed('q') or keyboard.is_pressed('Q'):
-                print('Поток №{0} остоновлен!'.format(thread_number))
+                print(f'Поток №{thread_number} остоновлен!')
                 observer.stop()
                 break
 
@@ -95,8 +94,8 @@ def monitor_folder(path, thread_number):
 
 
 def main():
-    ShowMenu()
-    StartWork()
+    show_menu()
+    start_work()
 
 
 if __name__ == "__main__":

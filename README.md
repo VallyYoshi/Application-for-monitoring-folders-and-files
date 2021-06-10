@@ -1,1 +1,1 @@
-# Application-for-monitoring-folders-and-files
+# APPLICATION FOR MONITORING FOLDERS AND FILES
